@@ -7,12 +7,20 @@ namespace App\Interfaces;
 interface ProductInterface
 {
     /**
-     * Get all users
+     * Get latest products
      *
      * @method  GET api/products
      * @access  public
      */
     public function getAllProducts();
+
+    /**
+     * Get discounted products
+     *
+     * @method  GET api/products
+     * @access  public
+     */
+    public function getDiscountedProducts();
 
     /**
      * Get User By ID

@@ -1,20 +1,24 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\CategoryInterface;
 use Illuminate\Http\Request;
 use App\Interfaces\ProductInterface;
 
 class HomeController extends Controller
 {
     protected $productInterface;
+    protected $categoryInterface;
 
     /**
      * Create a new constructor for this controller
      */
-    public function __construct(ProductInterface $productInterface)
+    public function __construct(ProductInterface $productInterface, CategoryInterface $categoryInterface)
     {
         $this->productInterface = $productInterface;
+        $this->categoryInterface = $categoryInterface;
     }
 
     /**
@@ -26,6 +30,28 @@ class HomeController extends Controller
     {
         return $this->productInterface->getAllProducts();
     }
+
+    /**
+     * Display a discounted products
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function discountedProducts()
+    {
+        return $this->productInterface->getDiscountedProducts();
+    }
+
+    /**
+     * Display a main categories
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function categories()
+    {
+        return $this->categoryInterface->getCategories();
+
+    }
+
 //
 //    /**
 //     * Store a newly created resource in storage.
@@ -41,7 +67,7 @@ class HomeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)

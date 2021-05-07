@@ -4,9 +4,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource
+class CategoryResource extends JsonResource
 {
-    public static $wrap = 'products';
+    public static $wrap = 'categories';
     /**
      * Transform the resource into an array.
      *

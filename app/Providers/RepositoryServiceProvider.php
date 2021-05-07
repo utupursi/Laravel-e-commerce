@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Interfaces\CategoryInterface;
+use App\Repositories\CategoryRepository;
+use App\Repositories\CategoryRepository1;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -15,5 +18,6 @@ class RepositoryServiceProvider extends ServiceProvider
             'App\Interfaces\ProductInterface',
             'App\Repositories\ProductRepository'
         );
+        $this->app->bind(CategoryInterface::class,CategoryRepository::class);
     }
 }

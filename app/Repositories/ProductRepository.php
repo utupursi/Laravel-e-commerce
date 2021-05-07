@@ -7,11 +7,14 @@ use App\Interfaces\ProductInterface;
 use App\Models\Product;
 use App\Traits\ResponseAPI;
 use App\Models\User;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
+
 class ProductRepository implements ProductInterface
 {
     // Use ResponseAPI Trait in this repository
     use ResponseAPI;
+
 //    public $productResource;
 //
 //    public function __construct(ProductResource $productResource)
@@ -22,13 +25,36 @@ class ProductRepository implements ProductInterface
     public function getAllProducts()
     {
         try {
-            $products = Product::with(['category'=>function($query){
+            $products = Product::with(['category' => function ($query) {
                 $query->with('availableLanguage');
-            }])->with('availableLanguage')->get();
+            }])->with('availableLanguage')->with('files')->orderBy('created_at', 'desc')->take(10)->get();
 
-            $resource=ProductResource::collection($products);
-            return $this->success("All Products", $products,$resource);
-        } catch(\Exception $e) {
+            $resource = new ProductResource($products);
+//            $resource=ProductResource::collection($products);
+            return $this->success("All Products", $products, $resource);
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function getDiscountedProducts()
+    {
+        try {
+            $products = Product::with(['category' => function ($query) {
+                $query->with('availableLanguage');
+            }])->with('availableLanguage')->with('files')
+                ->where([
+                    ['sale', '!=', "null"],
+                    ['sale', '!=', ""],
+                    ['sale_price', '!=', "null"],
+                    ['sale_price', '!=', ""]
+                ])
+                ->take(10)->get();
+
+            $resource = new ProductResource($products);
+//            $resource=ProductResource::collection($products);
+            return $this->success("All Products", $products, $resource);
+        } catch (\Exception $e) {
             return $this->error($e->getMessage(), $e->getCode());
         }
     }
@@ -39,10 +65,10 @@ class ProductRepository implements ProductInterface
             $user = Product::find($id);
 
             // Check the user
-            if(!$user) return $this->error("No user with ID $id", 404);
+            if (!$user) return $this->error("No user with ID $id", 404);
 
             return $this->success("User Detail", $user);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $this->error($e->getMessage(), $e->getCode());
         }
     }

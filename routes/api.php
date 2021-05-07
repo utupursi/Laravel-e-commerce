@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('products',[\App\Http\Controllers\Api\HomeController::class,'index']);
+Route::get('discounted-products',[\App\Http\Controllers\Api\HomeController::class,'discountedProducts']);
+Route::get('category',[\App\Http\Controllers\Api\HomeController::class,'categories']);
